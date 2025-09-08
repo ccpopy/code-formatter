@@ -1,0 +1,15 @@
+import { createRouter, createWebHistory } from "vue-router";
+
+const routes = [
+  { path: "/", name: "home", component: () => import("@/views/FormatterView.vue") },
+];
+
+const router = createRouter({
+  history: createWebHistory(), // 非 hash 路由
+  routes,
+  scrollBehavior() {
+    return { top: 0 };
+  },
+});
+
+export default router;
