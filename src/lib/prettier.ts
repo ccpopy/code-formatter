@@ -2,13 +2,24 @@
  * Prettier 浏览器端格式化封装
  * 仅使用 html/js/json/css 四种语言
  */
-import prettier from "prettier/standalone";
-import * as estree from "prettier/plugins/estree";
-import * as babel from "prettier/plugins/babel";
-import * as html from "prettier/plugins/html";
-import * as postcss from "prettier/plugins/postcss";
 
 export type Lang = "html" | "js" | "json" | "css";
+
+// 懒加载 Prettier
+let prettierPromise: Promise<any> | null = null;
+
+async function loadPrettier() {
+  if (!prettierPromise) {
+    prettierPromise = Promise.all([
+      import("prettier/standalone"),
+      import("prettier/plugins/estree"),
+      import("prettier/plugins/babel"),
+      import("prettier/plugins/html"),
+      import("prettier/plugins/postcss"),
+    ]);
+  }
+  return prettierPromise;
+}
 
 const parserMap: Record<Lang, string> = {
   html: "html",
@@ -22,9 +33,13 @@ export async function formatWithPrettier(
   lang: Lang,
   options: Record<string, any>
 ): Promise<string> {
+  // 懒加载 Prettier 和插件
+  const [prettier, estree, babel, html, postcss] = await loadPrettier();
+
   const parser = parserMap[lang];
   const plugins = [babel.default, estree.default, html.default, postcss.default];
-  return await prettier.format(code ?? "", {
+
+  return await prettier.default.format(code ?? "", {
     parser,
     plugins,
     ...options,

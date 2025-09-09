@@ -16,5 +16,27 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'prettier': ['prettier'],
+          // Vue 生态系统
+          'vue-vendor': ['vue', 'vue-router', '@vueuse/core'],
+          // UI 组件库
+          'ui-vendor': [
+            'radix-vue',
+            'reka-ui',
+            'class-variance-authority',
+            'clsx',
+            'tailwind-merge',
+            'vue-sonner'
+          ],
+          // 图标库
+          'icons': ['lucide-vue-next']
+        },
+      },
+    },
   }
 });
