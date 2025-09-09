@@ -29,7 +29,7 @@
             <div v-if="item.title" class="text-sm font-semibold">
               {{ item.title }}
             </div>
-            <div v-if="item.description" class="text-sm opacity-90">
+            <div v-if="item.description" class="text-sm opacity-90 whitespace-pre-line break-words">
               {{ item.description }}
             </div>
           </div>
