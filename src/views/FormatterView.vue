@@ -90,12 +90,12 @@
                       </ContextMenuLabel>
                       <div class="px-2 pb-2 space-y-1">
                         <div v-for="(key, idx) in rule.keys" :key="idx"
-                          class="text-xs font-mono bg-muted px-2 py-1 rounded-sm text-muted-foreground">
+                          class="text-xs font-mono bg-muted px-2 py-1 rounded-sm text-muted-foreground break-all">
                           {{ key }}
                         </div>
                       </div>
                       <ContextMenuSeparator />
-                      <ContextMenuItem @click="insertTextAtCursor(rule.value)">
+                      <ContextMenuItem @click="insertTextAtCursor(rule.value)" class="break-all">
                         <Type class="mr-2 h-4 w-4" />
                         插入: {{ rule.value }}
                       </ContextMenuItem>
