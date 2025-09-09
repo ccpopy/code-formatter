@@ -62,11 +62,13 @@
             </span>
           </div>
 
-          <div v-if="localRules.length" class="space-y-2 pt-2 pb-2 max-h-[300px] overflow-y-auto">
+          <div v-if="localRules.length" class="space-y-2 pt-2 pb-2 max-h-[300px] overflow-y-auto scrollbar-custom">
             <Card v-for="(rule, idx) in localRules" :key="idx"
-              class="p-4 transition-all hover:shadow-md hover:bg-accent/5"
-              :class="{ 'ring-primary/50 bg-primary/5': editingIndex === idx }">
-              <div class="flex items-start justify-between gap-4">
+              class="p-4 transition-all hover:shadow-sm hover:border-primary/20" :class="{
+                'ring-primary/30 bg-primary/5 border-primary/30': editingIndex === idx,
+                'hover:bg-accent/5': editingIndex !== idx
+              }">
+              <div class="flex items-center justify-between gap-4">
                 <div class="flex-1 space-y-2">
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>

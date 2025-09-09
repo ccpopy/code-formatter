@@ -46,43 +46,49 @@
     </div>
 
     <!-- 编辑器区域 -->
-    <div class="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-0">
-      <!-- 左侧：输入 -->
-      <div class="border-r flex flex-col">
-        <div class="px-6 py-2 border-b bg-muted/30 flex-shrink-0">
-          <div class="flex items-center justify-between">
-            <Label class="text-sm font-medium">原始代码</Label>
-            <span class="text-xs text-muted-foreground">
-              {{ input.length }} 字符
-            </span>
-          </div>
-        </div>
-        <div class="flex-1 relative min-h-0">
-          <Textarea v-model="input" placeholder="在此粘贴待格式化的代码..."
-            class="absolute inset-0 m-0 border-0 rounded-none resize-none font-mono text-sm p-6"
-            :class="{ 'text-muted-foreground': !input }" />
-        </div>
-      </div>
-
-      <!-- 右侧：输出 -->
-      <div class="flex flex-col bg-muted/5">
-        <div class="px-6 py-2 border-b bg-muted/30 flex-shrink-0">
-          <div class="flex items-center justify-between">
-            <Label class="text-sm font-medium">格式化结果</Label>
-            <span class="text-xs text-muted-foreground">
-              {{ output.length }} 字符
-            </span>
-          </div>
-        </div>
-        <div class="flex-1 relative overflow-auto min-h-0">
-          <pre v-if="output" class="absolute inset-0 m-0 p-6 font-mono text-sm"><code>{{ output }}</code></pre>
-          <div v-else class="absolute inset-0 flex items-center justify-center">
-            <div class="text-center text-muted-foreground">
-              <FileCode2 class="h-12 w-12 mx-auto mb-3 opacity-50" />
-              <p class="text-sm">格式化后的代码将显示在这里</p>
+    <div class="flex-1 p-4 min-h-0 bg-muted/30">
+      <div class="h-full grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- 左侧：输入 -->
+        <Card class="flex flex-col gap-0 p-0 overflow-hidden h-full min-h-0">
+          <div class="px-4 py-3 border-b bg-card shrink-0">
+            <div class="flex items-center justify-between">
+              <Label class="text-sm font-medium">原始代码</Label>
+              <span class="text-xs text-muted-foreground">
+                {{ input.length }} 字符
+              </span>
             </div>
           </div>
-        </div>
+          <div class="flex-1 relative min-h-0">
+            <div class="absolute inset-0 overflow-auto">
+              <Textarea v-model="input" placeholder="在此粘贴待格式化的代码…"
+                class="w-full h-full min-h-0 outline-none m-0 border-0 rounded-none resize-none font-mono text-sm p-4 bg-transparent scrollbar-custom"
+                :class="{ 'text-muted-foreground': !input }" />
+            </div>
+          </div>
+        </Card>
+
+        <!-- 右侧：输出 -->
+        <Card class="flex flex-col gap-0 p-0 overflow-hidden h-full min-h-0">
+          <div class="px-4 py-3 border-b bg-card shrink-0">
+            <div class="flex items-center justify-between">
+              <Label class="text-sm font-medium">格式化结果</Label>
+              <span class="text-xs text-muted-foreground">
+                {{ output.length }} 字符
+              </span>
+            </div>
+          </div>
+          <div class="flex-1 relative min-h-0 bg-muted/10">
+            <div v-if="output" class="absolute inset-0 overflow-auto scrollbar-custom">
+              <pre class="m-0 p-4 font-mono text-sm min-h-full"><code>{{ output }}</code></pre>
+            </div>
+            <div v-else class="absolute inset-0 flex items-center justify-center">
+              <div class="text-center text-muted-foreground">
+                <FileCode2 class="h-12 w-12 mx-auto mb-3 opacity-30" />
+                <p class="text-sm">格式化后的代码将显示在这里</p>
+              </div>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
 
@@ -108,6 +114,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
