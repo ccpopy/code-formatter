@@ -1,6 +1,6 @@
 <template>
   <Dialog :open="open" @update:open="onUpdateOpen">
-    <DialogContent class="max-w-4xl max-h-[90vh]">
+    <DialogContent class="sm:max-w-2xl md:max-w-4xl max-h-[90vh]">
       <DialogHeader>
         <DialogTitle>替换规则配置</DialogTitle>
         <DialogDescription>
@@ -54,7 +54,7 @@
         </Card>
 
         <!-- 规则列表 -->
-        <div class="space-y-2">
+        <div class="w-full space-y-2">
           <div class="flex items-center justify-between mb-2">
             <h3 class="text-sm font-medium">已配置的规则</h3>
             <span class="text-xs text-muted-foreground">
@@ -62,7 +62,7 @@
             </span>
           </div>
 
-          <div v-if="localRules.length" class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
+          <div v-if="localRules.length" class="space-y-2 max-h-[300px] overflow-y-auto">
             <Card v-for="(rule, idx) in localRules" :key="idx"
               class="p-4 transition-all hover:shadow-md hover:bg-accent/5"
               :class="{ 'ring-2 ring-primary/50 bg-primary/5': editingIndex === idx }">

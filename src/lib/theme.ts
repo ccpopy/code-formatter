@@ -1,4 +1,4 @@
-export type ThemeMode = "system" | "light" | "dark";
+export type ThemeMode = "light" | "dark";
 const STORAGE_KEY = "formatter:theme";
 
 export const prefersDark = () =>
@@ -6,7 +6,7 @@ export const prefersDark = () =>
 
 export function getStoredTheme(): ThemeMode {
   const v = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-  return v ?? "system";
+  return v ?? "light";
 }
 
 export function storeTheme(mode: ThemeMode) {
@@ -14,7 +14,7 @@ export function storeTheme(mode: ThemeMode) {
 }
 
 export function applyTheme(mode: ThemeMode) {
-  const isDark = mode === "dark" || (mode === "system" && prefersDark());
+  const isDark = mode === "dark" || prefersDark();
   document.documentElement.classList.toggle("dark", isDark);
 }
 
@@ -22,7 +22,7 @@ export function setupThemeWatcher() {
   const media = window.matchMedia("(prefers-color-scheme: dark)");
   const handler = () => {
     const mode = getStoredTheme();
-    if (mode === "system") applyTheme(mode);
+    if (mode === "light") applyTheme(mode);
   };
   media.addEventListener("change", handler);
   return () => media.removeEventListener("change", handler);
