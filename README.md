@@ -1,5 +1,6 @@
-# 代码格式化工具 · Code Formatter
-
+<h1 align="center">代码格式化工具 · Code Formatter</h1>
+<div align="center">
+  
 🎨 **基于 Vue 3 + Prettier 的在线代码格式化工具**
 
 [![Vue](https://img.shields.io/badge/Vue-3.5.21-brightgreen?logo=vue.js)](https://vuejs.org/)
@@ -9,6 +10,8 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 
 [功能特性](#-功能特性) | [快速开始](#-快速开始) | [使用指南](#-使用指南)
+
+</div>
 
 ---
 
@@ -169,8 +172,6 @@ code-formatter/
 ## 📄 许可证
 
 MIT License - 详见 [LICENSE](LICENSE) 文件
-
----
 
 <div align="center">
 
