@@ -15,7 +15,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="space-y-2">
                 <Label for="keys">要替换的字符串</Label>
-                <Input id="keys" v-model="draftRule.keys" placeholder="多个用逗号分隔" class="font-mono text-sm" />
+                <Input id="keys" v-model="draftRule.keysStr" placeholder="多个用逗号分隔" class="font-mono text-sm" />
                 <p class="text-xs text-muted-foreground">
                   例如：{opentype},-gkfs
                 </p>
@@ -39,7 +39,7 @@
             </div>
 
             <div class="flex gap-2">
-              <Button @click="addOrUpdateRule" :disabled="!draftRule.keys || draftRule.value == null">
+              <Button @click="addOrUpdateRule" :disabled="!draftRule.keysStr || draftRule.value == null">
                 <Plus class="h-4 w-4 mr-2" v-if="editingIndex === -1" />
                 <Save class="h-4 w-4 mr-2" v-else />
                 {{ editingIndex === -1 ? '添加规则' : '保存修改' }}
@@ -62,16 +62,19 @@
             </span>
           </div>
 
-          <div v-if="localRules.length" class="space-y-2 max-h-[300px] overflow-y-auto">
+          <div v-if="localRules.length" class="space-y-2 pt-2 pb-2 max-h-[300px] overflow-y-auto">
             <Card v-for="(rule, idx) in localRules" :key="idx"
               class="p-4 transition-all hover:shadow-md hover:bg-accent/5"
-              :class="{ 'ring-2 ring-primary/50 bg-primary/5': editingIndex === idx }">
+              :class="{ 'ring-primary/50 bg-primary/5': editingIndex === idx }">
               <div class="flex items-start justify-between gap-4">
                 <div class="flex-1 space-y-2">
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
                     <div>
                       <span class="text-xs text-muted-foreground">替换：</span>
-                      <div class="font-mono mt-1 break-all">{{ rule.keys }}</div>
+                      <div class="flex flex-wrap gap-1 mt-1">
+                        <Badge v-for="(k, i) in rule.keys" :key="i" class="font-mono text-xs">{{ k
+                        }}</Badge>
+                      </div>
                     </div>
                     <div>
                       <span class="text-xs text-muted-foreground">为：</span>
@@ -123,6 +126,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import type { ReplaceRule } from "@/lib/replacer";
+import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -160,7 +164,8 @@ const onUpdateOpen = (v: boolean) => emit("update:open", v);
 
 // 局部副本
 const localRules = ref<ReplaceRule[]>([]);
-const draftRule = ref<ReplaceRule>({ keys: "", value: "", remark: "" });
+type DraftRule = { keysStr: string; value: string; remark?: string }
+const draftRule = ref<DraftRule>({ keysStr: "", value: "", remark: "" });
 const editingIndex = ref(-1);
 
 // 监听弹窗打开，初始化数据
@@ -175,13 +180,23 @@ watch(
 );
 
 function resetDraft() {
-  draftRule.value = { keys: "", value: "", remark: "" };
+  draftRule.value = { keysStr: "", value: "", remark: "" };
   editingIndex.value = -1;
 }
 
+// 保存：字符串 -> 数组
 function addOrUpdateRule() {
-  const rule = { ...draftRule.value };
-  if (!rule.keys || rule.value == null) return;
+  const keysArr = (draftRule.value.keysStr || "")
+    .split(/[，,]/)
+    .map((s) => s.trim())
+    .filter(Boolean);
+
+  const rule: ReplaceRule = {
+    keys: keysArr,
+    value: draftRule.value.value ?? "",
+    remark: draftRule.value.remark ?? ""
+  };
+  if (!rule.keys.length || rule.value == null) return;
 
   if (editingIndex.value === -1) {
     localRules.value.push(rule);
@@ -191,9 +206,14 @@ function addOrUpdateRule() {
   resetDraft();
 }
 
+// 编辑：数组 -> 字符串
 function editRule(idx: number) {
   const rule = localRules.value[idx];
-  draftRule.value = { ...rule };
+  draftRule.value = {
+    keysStr: Array.isArray(rule.keys) ? rule.keys.join(",") : (rule as any).keys || "",
+    value: (rule as any).value ?? "",
+    remark: rule.remark ?? ""
+  };
   editingIndex.value = idx;
 }
 

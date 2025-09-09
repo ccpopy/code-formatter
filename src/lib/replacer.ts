@@ -1,6 +1,6 @@
 export interface ReplaceRule {
   /** 用逗号/中文逗号分隔的多个待替换字符串，例如："{opentype},-gkfs" */
-  keys: string;
+  keys: string[]
   /** 替换后的目标文本，例如："主动公开" */
   value: string;
   /** 备注，供人类识别 */
@@ -12,11 +12,10 @@ export function applyReplacements(source: string, rules: ReplaceRule[]): string 
   let result = source ?? "";
   if (!Array.isArray(rules)) return result;
   for (const rule of rules) {
-    if (!rule?.keys) continue;
+    if (!Array.isArray(rule?.keys)) continue;
     const variants = rule.keys
-      .split(/[，,]/)
-      .map((s) => s.trim())
-      .filter(Boolean);
+      .map((s) => (s ?? "").toString().trim())
+      .filter((s) => s.length > 0);
     for (const key of variants) {
       const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
       const re = new RegExp(escaped, "g");

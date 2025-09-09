@@ -23,7 +23,7 @@ export async function formatWithPrettier(
   options: Record<string, any>
 ): Promise<string> {
   const parser = parserMap[lang];
-  const plugins = [babel, estree, html, postcss];
+  const plugins = [babel.default, estree.default, html.default, postcss.default];
   return await prettier.format(code ?? "", {
     parser,
     plugins,
