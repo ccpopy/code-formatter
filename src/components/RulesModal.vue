@@ -10,9 +10,9 @@
 
       <div class="space-y-6">
         <!-- 添加/编辑规则表单 -->
-        <Card class="p-4">
+        <Card class="p-6 bg-muted/30">
           <div class="space-y-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div class="space-y-2">
                 <Label for="keys">要替换的字符串</Label>
                 <Input id="keys" v-model="draftRule.keys" placeholder="多个用逗号分隔" class="font-mono text-sm" />
@@ -63,8 +63,9 @@
           </div>
 
           <div v-if="localRules.length" class="space-y-2 max-h-[300px] overflow-y-auto pr-2">
-            <Card v-for="(rule, idx) in localRules" :key="idx" class="p-4 transition-all hover:shadow-md"
-              :class="{ 'ring-2 ring-primary': editingIndex === idx }">
+            <Card v-for="(rule, idx) in localRules" :key="idx"
+              class="p-4 transition-all hover:shadow-md hover:bg-accent/5"
+              :class="{ 'ring-2 ring-primary/50 bg-primary/5': editingIndex === idx }">
               <div class="flex items-start justify-between gap-4">
                 <div class="flex-1 space-y-2">
                   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">

@@ -3,7 +3,7 @@ import { ref } from "vue";
 export type ToastProps = {
   title?: string;
   description?: string;
-  variant?: "default" | "destructive";
+  variant?: "default" | "destructive" | "success" | "warning" | "info";
   duration?: number;
 };
 
@@ -20,6 +20,7 @@ export function useToast() {
 
     const newToast: Toast = {
       ...props,
+      variant: props.variant || "default",
       id,
     };
 
