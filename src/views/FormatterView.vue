@@ -69,9 +69,46 @@
           </div>
           <div class="flex-1 relative min-h-0">
             <div class="absolute inset-0 overflow-auto">
-              <Textarea v-model="input" placeholder="在此粘贴待格式化的代码…"
-                class="w-full h-full min-h-0 outline-none m-0 border-0 rounded-none resize-none font-mono text-sm p-4 bg-transparent scrollbar-custom"
-                :class="{ 'text-muted-foreground': !input }" />
+              <ContextMenu>
+                <ContextMenuTrigger as-child>
+                  <Textarea ref="textareaRef" v-model="input" placeholder="在此粘贴待格式化的代码…"
+                    class="w-full h-full min-h-0 outline-none m-0 border-0 rounded-none resize-none font-mono text-sm p-4 bg-transparent scrollbar-custom"
+                    :class="{ 'text-muted-foreground': !input }" @mouseup="updateCursorPosition"
+                    @keyup="updateCursorPosition" @contextmenu="updateCursorPosition" />
+                </ContextMenuTrigger>
+                <ContextMenuContent class="w-64" v-if="validRules.length > 0">
+                  <ContextMenuLabel>插入替换文本</ContextMenuLabel>
+                  <ContextMenuSeparator />
+                  <ContextMenuSub v-for="rule in validRules" :key="rule.remark">
+                    <ContextMenuSubTrigger>
+                      <FileText class="mr-2 h-4 w-4" />
+                      {{ rule.remark }}
+                    </ContextMenuSubTrigger>
+                    <ContextMenuSubContent class="w-48">
+                      <ContextMenuLabel class="text-xs text-muted-foreground mb-2">
+                        将替换以下字符串:
+                      </ContextMenuLabel>
+                      <div class="px-2 pb-2 space-y-1">
+                        <div v-for="(key, idx) in rule.keys" :key="idx"
+                          class="text-xs font-mono bg-muted px-2 py-1 rounded-sm text-muted-foreground">
+                          {{ key }}
+                        </div>
+                      </div>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem @click="insertTextAtCursor(rule.value)">
+                        <Type class="mr-2 h-4 w-4" />
+                        插入: {{ rule.value }}
+                      </ContextMenuItem>
+                    </ContextMenuSubContent>
+                  </ContextMenuSub>
+                </ContextMenuContent>
+                <ContextMenuContent v-else>
+                  <ContextMenuItem disabled>
+                    <AlertCircle class="mr-2 h-4 w-4" />
+                    暂无可用的替换规则
+                  </ContextMenuItem>
+                </ContextMenuContent>
+              </ContextMenu>
             </div>
           </div>
         </Card>
@@ -115,12 +152,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref, watch, computed } from "vue";
 import { useToast } from "@/components/ui/toast/use-toast";
 import RulesModal from "@/components/RulesModal.vue";
 import { rules, prettierOptions } from "@/composables/useLocalSettings";
 import { applyReplacements } from "@/lib/replacer";
 import { formatWithPrettier, type Lang } from "@/lib/prettier";
+import type { ReplaceRule } from "@/lib/replacer";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -134,11 +172,25 @@ import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "@/components/ui/context-menu";
+import {
   Sparkles,
   Replace,
   Copy,
   Trash2,
-  FileCode2
+  FileCode2,
+  FileText,
+  Type,
+  AlertCircle
 } from "lucide-vue-next";
 
 const { toast } = useToast();
@@ -148,6 +200,55 @@ const output = ref("");
 const lang = ref<Lang>("html");
 const formatting = ref(false);
 const openRulesModal = ref(false);
+const textareaRef = ref<HTMLTextAreaElement | null>(null);
+const cursorPosition = ref(0);
+
+// 计算有效的规则（备注不为空，目标文本不为空）
+const validRules = computed(() => {
+  return rules.value.filter((rule: ReplaceRule) =>
+    rule.remark &&
+    rule.remark.trim() !== "" &&
+    rule.value &&
+    rule.value.trim() !== ""
+  );
+});
+
+// 更新光标位置
+function updateCursorPosition() {
+  if (textareaRef.value && textareaRef.value instanceof HTMLTextAreaElement) {
+    cursorPosition.value = textareaRef.value.selectionStart || 0;
+  }
+}
+
+// 在光标位置插入文本
+function insertTextAtCursor(text: string) {
+  if (!textareaRef.value) return;
+
+  const textarea = textareaRef.value;
+  const start = cursorPosition.value;
+  const before = input.value.substring(0, start);
+  const after = input.value.substring(start);
+
+  // 更新输入值
+  input.value = before + text + after;
+
+  // 设置焦点并更新光标位置
+  textarea.focus();
+  const newPosition = start + text.length;
+
+  // 使用 nextTick 确保 DOM 更新后再设置光标位置
+  setTimeout(() => {
+    textarea.setSelectionRange(newPosition, newPosition);
+    cursorPosition.value = newPosition;
+  }, 0);
+
+  toast({
+    title: "已插入文本",
+    description: `已在光标位置插入: ${text}`,
+    variant: "success",
+    duration: 2000,
+  });
+}
 
 async function handleFormat() {
   if (!input.value) {
