@@ -52,7 +52,16 @@
         <Card class="flex flex-col gap-0 p-0 overflow-hidden h-full min-h-0">
           <div class="px-4 py-3 border-b bg-card shrink-0">
             <div class="flex items-center justify-between">
-              <Label class="text-sm font-medium">原始代码</Label>
+              <Label class="text-sm font-medium">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M608.085333 520.021333m-163.84 0a163.84 163.84 0 1 0 327.68 0 163.84 163.84 0 1 0-327.68 0Z"
+                    fill="currentColor" opacity=".3"></path>
+                  <path
+                    d="M285.013333 299.008a30.208 30.208 0 0 0-43.008 0L50.176 490.666667a30.378667 30.378667 0 0 0 0 42.837333l191.829333 191.488A30.378667 30.378667 0 0 0 285.013333 682.666667l-170.666666-170.666667 170.666666-170.666667a30.378667 30.378667 0 0 0 0-42.325333zM973.824 490.666667L781.994667 299.008A30.378667 30.378667 0 0 0 738.986667 341.333333l170.666666 170.666667-170.666666 170.666667a30.378667 30.378667 0 0 0 43.008 42.837333l191.829333-192a30.378667 30.378667 0 0 0 0-42.837333zM609.621333 283.818667l-213.333333 374.442666-30.549333 53.589334c-17.92 31.402667 30.72 59.904 48.64 28.330666l213.333333-374.442666 30.549333-53.589334c17.066667-31.402667-30.72-59.904-48.64-28.330666z"
+                    fill="currentColor"></path>
+                </svg>
+                <span>原始代码</span>
+              </Label>
               <span class="text-xs text-muted-foreground">
                 {{ input.length }} 字符
               </span>
@@ -71,7 +80,14 @@
         <Card class="flex flex-col gap-0 p-0 overflow-hidden h-full min-h-0">
           <div class="px-4 py-3 border-b bg-card shrink-0">
             <div class="flex items-center justify-between">
-              <Label class="text-sm font-medium">格式化结果</Label>
+              <Label class="text-sm font-medium">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M808.562 336.1l85.618-85.561a28.444 28.444 0 0 0 3.242-36.295l-3.242-3.983-80.498-80.44a28.444 28.444 0 0 0-36.295-3.243l-3.926 3.242-85.39 85.448 117.76 117.76a43.236 43.236 0 0 1 2.73 3.072z m-60.018 60.017a43.236 43.236 0 0 1-3.072-2.787l-117.76-117.76L129.82 773.46a28.444 28.444 0 0 0-3.242 36.295l3.242 3.983 80.498 80.44a28.444 28.444 0 0 0 36.295 3.243l3.926-3.242 498.005-498.063zM954.482 149.96a113.778 113.778 0 0 1 0 160.882L310.84 954.48a113.778 113.778 0 0 1-160.882 0l-80.44-80.44a113.778 113.778 0 0 1 0-160.882l643.64-643.64a113.778 113.778 0 0 1 160.882 0l80.44 80.44z m-670.038 20.708l-73.557-40.22 73.557-40.221 40.22-73.558 40.221 73.558 73.558 40.22-73.558 40.22-40.22 73.558-40.22-73.557zM133.916 378.084L97.11 358.002l36.807-20.139 20.082-36.75 20.139 36.75 36.75 20.139-36.75 20.082-20.139 36.807-20.082-36.807z m602.17 478.72l-110.308-60.36 110.364-60.302 60.302-110.364 60.303 110.364 110.364 60.302-110.364 60.303-60.303 110.364-60.302-110.364z"
+                    fill="currentColor"></path>
+                </svg>
+                <span>格式化结果</span>
+              </Label>
               <span class="text-xs text-muted-foreground">
                 {{ output.length }} 字符
               </span>
@@ -249,3 +265,13 @@ watch(prettierOptions, () => {
   }
 }, { deep: true });
 </script>
+<style scoped>
+.icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: middle;
+  fill: currentColor;
+  overflow: hidden;
+  font-size: 16px;
+}
+</style>
