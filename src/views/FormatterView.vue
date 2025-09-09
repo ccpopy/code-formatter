@@ -170,6 +170,7 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
+import type { ComponentPublicInstance } from "vue";
 import { Label } from "@/components/ui/label";
 import {
   ContextMenu,
@@ -200,7 +201,7 @@ const output = ref("");
 const lang = ref<Lang>("html");
 const formatting = ref(false);
 const openRulesModal = ref(false);
-const textareaRef = ref<HTMLTextAreaElement | null>(null);
+const textareaRef = ref<ComponentPublicInstance | null>(null);
 const cursorPosition = ref(0);
 
 // 计算有效的规则（备注不为空，目标文本不为空）
@@ -215,16 +216,17 @@ const validRules = computed(() => {
 
 // 更新光标位置
 function updateCursorPosition() {
-  if (textareaRef.value && textareaRef.value instanceof HTMLTextAreaElement) {
-    cursorPosition.value = textareaRef.value.selectionStart || 0;
+  if (textareaRef.value && textareaRef.value.$el) {
+    const textarea = textareaRef.value.$el as HTMLTextAreaElement;
+    cursorPosition.value = textarea.selectionStart || 0;
   }
 }
 
 // 在光标位置插入文本
 function insertTextAtCursor(text: string) {
-  if (!textareaRef.value) return;
+  if (!textareaRef.value?.$el) return;
 
-  const textarea = textareaRef.value;
+  const textarea = textareaRef.value.$el as HTMLTextAreaElement;
   const start = cursorPosition.value;
   const before = input.value.substring(0, start);
   const after = input.value.substring(start);
