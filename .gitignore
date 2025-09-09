@@ -101,6 +101,8 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
+*-lock.json
+
 # IDE
 .vscode/
 .idea/

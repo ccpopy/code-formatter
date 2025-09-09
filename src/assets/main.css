@@ -41,7 +41,11 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
-html, body, #app { height: 100%; }
+html,
+body,
+#app {
+  height: 100%;
+}
 
 body {
   @apply bg-white text-slate-900 dark:bg-slate-950 dark:text-slate-100;
@@ -137,5 +141,8 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  :root {
+    --radius: 0.25rem;
   }
 }

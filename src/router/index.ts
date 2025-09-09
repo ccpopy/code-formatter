@@ -5,7 +5,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(), // 非 hash 路由
+  history: createWebHistory(),
   routes,
   scrollBehavior() {
     return { top: 0 };
