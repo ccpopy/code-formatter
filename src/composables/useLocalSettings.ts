@@ -45,7 +45,7 @@ function save<T>(key: string, value: T) {
 
 export const rules = ref<ReplaceRule[]>(
   load<ReplaceRule[]>(LS_RULES, [
-    { keys: ["{opentype}", "-gkfs"], value: "主动公开", remark: "公开方式" }
+    { keys: ["{opentype}", "-gkfs"], value: "主动公开", remark: "公开方式", showInMenu: false }
   ])
 );
 

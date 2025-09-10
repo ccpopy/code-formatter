@@ -37,7 +37,16 @@
                 </p>
               </div>
             </div>
-
+            <!-- 右键菜单显示开关 -->
+            <div class="flex items-center justify-between px-2">
+              <div class="space-y-0.5">
+                <Label>在右键菜单中显示</Label>
+                <p class="text-xs text-muted-foreground">
+                  开启后，可在输入框右键菜单中快速插入替换文本
+                </p>
+              </div>
+              <Switch v-model:checked="draftRule.showInMenu" />
+            </div>
             <div class="flex gap-2">
               <Button @click="addOrUpdateRule" :disabled="!draftRule.keysStr || draftRule.value == null">
                 <Plus class="h-4 w-4 mr-2" v-if="editingIndex === -1" />
@@ -88,7 +97,7 @@
                     </div>
                   </div>
                 </div>
-
+                <Switch disabled aria-readonly v-model:checked="rule.showInMenu" />
                 <div class="flex gap-1">
                   <Button size="icon" variant="ghost" @click="editRule(idx)" class="h-8 w-8">
                     <Edit2 class="h-3 w-3" />
@@ -151,6 +160,7 @@ import {
   Check,
   AlertCircle
 } from "lucide-vue-next";
+import { Switch } from "@/components/ui/switch";
 
 const props = defineProps<{
   open: boolean;
@@ -166,8 +176,13 @@ const onUpdateOpen = (v: boolean) => emit("update:open", v);
 
 // 局部副本
 const localRules = ref<ReplaceRule[]>([]);
-type DraftRule = { keysStr: string; value: string; remark?: string }
-const draftRule = ref<DraftRule>({ keysStr: "", value: "", remark: "" });
+type DraftRule = {
+  keysStr: string;
+  value: string;
+  remark?: string;
+  showInMenu?: boolean;
+}
+const draftRule = ref<DraftRule>({ keysStr: "", value: "", remark: "", showInMenu: false });
 const editingIndex = ref(-1);
 
 // 监听弹窗打开，初始化数据
@@ -182,7 +197,7 @@ watch(
 );
 
 function resetDraft() {
-  draftRule.value = { keysStr: "", value: "", remark: "" };
+  draftRule.value = { keysStr: "", value: "", remark: "", showInMenu: false };
   editingIndex.value = -1;
 }
 
@@ -196,7 +211,8 @@ function addOrUpdateRule() {
   const rule: ReplaceRule = {
     keys: keysArr,
     value: draftRule.value.value ?? "",
-    remark: draftRule.value.remark ?? ""
+    remark: draftRule.value.remark ?? "",
+    showInMenu: draftRule.value.showInMenu ?? false
   };
   if (!rule.keys.length || rule.value == null) return;
 
@@ -214,7 +230,8 @@ function editRule(idx: number) {
   draftRule.value = {
     keysStr: Array.isArray(rule.keys) ? rule.keys.join(",") : (rule as any).keys || "",
     value: (rule as any).value ?? "",
-    remark: rule.remark ?? ""
+    remark: rule.remark ?? "",
+    showInMenu: rule.showInMenu ?? false
   };
   editingIndex.value = idx;
 }

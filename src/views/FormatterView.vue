@@ -204,13 +204,14 @@ const openRulesModal = ref(false);
 const textareaRef = ref<ComponentPublicInstance | null>(null);
 const cursorPosition = ref(0);
 
-// 计算有效的规则（备注不为空，目标文本不为空）
+// 计算有效的规则: 备注不为空，目标文本不为空
 const validRules = computed(() => {
   return rules.value.filter((rule: ReplaceRule) =>
     rule.remark &&
     rule.remark.trim() !== "" &&
     rule.value &&
-    rule.value.trim() !== ""
+    rule.value.trim() !== "" &&
+    rule.showInMenu === true
   );
 });
 

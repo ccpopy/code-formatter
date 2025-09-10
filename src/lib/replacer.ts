@@ -3,8 +3,10 @@ export interface ReplaceRule {
   keys: string[]
   /** 替换后的目标文本，例如："主动公开" */
   value: string;
-  /** 备注，供人类识别 */
+  /** 备注，方便识别用途 */
   remark?: string;
+  /** 是否在右键菜单中显示 */
+  showInMenu?: boolean;
 }
 
 /** 对用户粘贴的原始代码进行“批量字符串替换”预处理 */
