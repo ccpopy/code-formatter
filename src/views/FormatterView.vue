@@ -86,7 +86,7 @@
                     </ContextMenuSubTrigger>
                     <ContextMenuSubContent class="w-48">
                       <ContextMenuLabel class="text-xs text-muted-foreground mb-2">
-                        将替换以下字符串:
+                        对应以下字符串:
                       </ContextMenuLabel>
                       <div class="px-2 pb-2 space-y-1">
                         <div v-for="(key, idx) in rule.keys" :key="idx"
