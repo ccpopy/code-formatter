@@ -45,7 +45,7 @@
                   开启后，可在输入框右键菜单中快速插入替换文本
                 </p>
               </div>
-              <Switch v-model:checked="draftRule.showInMenu" />
+              <Switch :checked="draftRule.showInMenu" />
             </div>
             <div class="flex gap-2">
               <Button @click="addOrUpdateRule" :disabled="!draftRule.keysStr || draftRule.value == null">
@@ -97,7 +97,14 @@
                     </div>
                   </div>
                 </div>
-                <Switch disabled aria-readonly v-model:checked="rule.showInMenu" />
+                <div class="flex">
+                  <div>
+                    <span class="text-xs text-muted-foreground">右键菜单显示：</span>
+                    <div class="flex flex-wrap gap-1 mt-1">
+                      <Switch disabled aria-readonly :checked="rule.showInMenu ?? false" />
+                    </div>
+                  </div>
+                </div>
                 <div class="flex gap-1">
                   <Button size="icon" variant="ghost" @click="editRule(idx)" class="h-8 w-8">
                     <Edit2 class="h-3 w-3" />
@@ -231,8 +238,9 @@ function editRule(idx: number) {
     keysStr: Array.isArray(rule.keys) ? rule.keys.join(",") : (rule as any).keys || "",
     value: (rule as any).value ?? "",
     remark: rule.remark ?? "",
-    showInMenu: rule.showInMenu ?? false
+    showInMenu: rule.showInMenu === true
   };
+  console.log(draftRule.value);
   editingIndex.value = idx;
 }
 
