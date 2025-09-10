@@ -45,7 +45,7 @@
                   开启后，可在输入框右键菜单中快速插入替换文本
                 </p>
               </div>
-              <Switch :checked="draftRule.showInMenu" />
+              <Switch v-model="draftRule.showInMenu" />
             </div>
             <div class="flex gap-2">
               <Button @click="addOrUpdateRule" :disabled="!draftRule.keysStr || draftRule.value == null">
@@ -101,11 +101,11 @@
                   <div>
                     <span class="text-xs text-muted-foreground">右键菜单显示：</span>
                     <div class="flex flex-wrap gap-1 mt-1">
-                      <Switch disabled aria-readonly :checked="rule.showInMenu ?? false" />
+                      <Switch disabled v-model="rule.showInMenu" />
                     </div>
                   </div>
                 </div>
-                <div class="flex gap-1">
+                <div class=" flex gap-1">
                   <Button size="icon" variant="ghost" @click="editRule(idx)" class="h-8 w-8">
                     <Edit2 class="h-3 w-3" />
                   </Button>
@@ -187,7 +187,7 @@ type DraftRule = {
   keysStr: string;
   value: string;
   remark?: string;
-  showInMenu?: boolean;
+  showInMenu: boolean;
 }
 const draftRule = ref<DraftRule>({ keysStr: "", value: "", remark: "", showInMenu: false });
 const editingIndex = ref(-1);
@@ -204,7 +204,12 @@ watch(
 );
 
 function resetDraft() {
-  draftRule.value = { keysStr: "", value: "", remark: "", showInMenu: false };
+  draftRule.value = {
+    keysStr: "",
+    value: "",
+    remark: "",
+    showInMenu: false
+  };
   editingIndex.value = -1;
 }
 
@@ -219,7 +224,7 @@ function addOrUpdateRule() {
     keys: keysArr,
     value: draftRule.value.value ?? "",
     remark: draftRule.value.remark ?? "",
-    showInMenu: draftRule.value.showInMenu ?? false
+    showInMenu: draftRule.value.showInMenu
   };
   if (!rule.keys.length || rule.value == null) return;
 
